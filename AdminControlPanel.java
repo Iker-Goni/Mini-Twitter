@@ -12,6 +12,7 @@ public class AdminControlPanel extends JFrame{
     // Constructor for AdminControlPanel
     public AdminControlPanel() {
         this.users = new ArrayList<>();
+        this.groups = new ArrayList<>();
         initialize(); // Call the initialization method in the constructor
     }
 
@@ -126,6 +127,16 @@ public class AdminControlPanel extends JFrame{
         };
 
         userTotal.addActionListener(showUserTotal);
+
+        // showGroupTotal action
+        ActionListener showGroupTotal = new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                JOptionPane.showMessageDialog(null, "Group Total: " + groups.size());
+            }
+        };
+
+        groupTotal.addActionListener(showGroupTotal);
 
         // add mainPanel to frame
         frame.add(mainPanel);

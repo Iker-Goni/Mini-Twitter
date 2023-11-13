@@ -44,4 +44,9 @@ public class User implements Component{
     public void removeUser(Component user) throws UnsupportedOperationException{
         throw new UnsupportedOperationException("Cannot remove a user from a user");
     }
+
+    @Override
+    public String toString(){
+        return getID();
+    }
 }

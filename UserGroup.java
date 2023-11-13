@@ -28,4 +28,9 @@ public class UserGroup implements Component{
     public void removeUser(Component component){
         components.remove(component);
     }
+
+    @Override
+    public String toString(){
+        return getID();
+    }
 }

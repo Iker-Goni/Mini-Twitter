@@ -20,15 +20,16 @@ public class AdminControlPanel extends JFrame{
     public void initialize() {
         JFrame frame = new JFrame();
 
+        // create root group
+        UserGroup root = new UserGroup("Root");
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(root);
+        JTree treeView = new JTree(rootNode);
+
         // main panel
         JSplitPane mainPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 
         // rightPanel
         JPanel rightPanel = new JPanel(new GridBagLayout());
-
-        // JTree
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Root");
-        JTree treeView = new JTree(rootNode);
 
         // JScrollPane
         JScrollPane scrollPane = new JScrollPane(treeView);

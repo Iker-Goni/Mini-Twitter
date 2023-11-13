@@ -4,4 +4,6 @@ public interface Component {
     void removeUser(Component user);
 
     void addUser(Component user);
+
+    String toString();
 }

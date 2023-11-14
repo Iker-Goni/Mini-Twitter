@@ -90,6 +90,16 @@ public class UserView extends JFrame{
 
         followUser.addActionListener(followUserAction);
 
+        // postMessage action
+        ActionListener postTweetAction = new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                currentUser.postMessage(tweetMessage.getText());
+            }
+        };
+
+        postTweet.addActionListener(postTweetAction);
+
         // add centerPanel to mainPanel
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 

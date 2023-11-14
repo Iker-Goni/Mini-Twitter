@@ -7,11 +7,13 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
 
 
 public class AdminControlPanel extends JFrame{
     private List<User> users;
     private List<UserGroup> groups;
+    private HashSet<String> userIDs;
     private DefaultMutableTreeNode selectedNode;
     private JTree treeView;
     private DefaultTreeModel treeModel;
@@ -19,6 +21,7 @@ public class AdminControlPanel extends JFrame{
     public AdminControlPanel() {
         this.users = new ArrayList<>();
         this.groups = new ArrayList<>();
+        this.userIDs = new HashSet<>();
         initialize(); // Call the initialization method in the constructor
     }
 
@@ -125,10 +128,16 @@ public class AdminControlPanel extends JFrame{
         ActionListener addedUser = new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                User user = new User(userID.getText());
-                userID.setText("");
-                users.add(user);
-                addChildNode(selectedNode, user);
+                if(userIDs == null || !userIDs.contains(userID.getText())){
+                    userIDs.add(userID.getText());
+                    User user = new User(userID.getText());
+                    userID.setText("");
+                    users.add(user);
+                    addChildNode(selectedNode, user);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Error: User ID is already in use, try another.");
+                }
             }
         };
 
@@ -166,6 +175,20 @@ public class AdminControlPanel extends JFrame{
         };
 
         groupTotal.addActionListener(showGroupTotal);
+
+        // openUserView action
+        ActionListener openUserViewAction = new ActionListener(){
+            @Override 
+            public void actionPerformed(ActionEvent e){
+                Object component = selectedNode.getUserObject();
+                if(component instanceof User){
+                    User user = (User) component;
+                    UserView userView = new UserView(user);
+                }
+            }
+        };
+
+        openUserView.addActionListener(openUserViewAction);
 
         // tree selection listener
         treeView.addTreeSelectionListener(new TreeSelectionListener() {

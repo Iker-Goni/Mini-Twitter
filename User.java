@@ -6,12 +6,21 @@ public class User implements Component{
     private List<User> followers;
     private List<User> following;
     private List<String> postedMessages;
+    private UserGroup parentGroup;
 
     public User(String userID){
         this.userID = userID;
         this.followers = new ArrayList<>();
         this.following = new ArrayList<>();
         this.postedMessages = new ArrayList<>();
+    }
+
+    public UserGroup getParent(){
+        return this.parentGroup;
+    }
+
+    public void setParent(UserGroup group){
+        this.parentGroup = group;
     }
 
     public void follow(User user){

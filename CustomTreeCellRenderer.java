@@ -1,7 +1,6 @@
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import java.awt.*;
 
 public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
     @Override

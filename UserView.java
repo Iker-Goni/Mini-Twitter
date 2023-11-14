@@ -7,6 +7,7 @@ public class UserView extends JFrame{
     private User currentUser;
     private List<User> users;
     private DefaultListModel<String> currentFollowingModel;
+    
     public UserView(User user, List<User> users){
         this.currentUser = user;
         this.users = users;
@@ -94,6 +95,9 @@ public class UserView extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e){
                 currentUser.postMessage(tweetMessage.getText());
+                tweetMessage.setText("");
+                AdminControlPanel tempPanel = AdminControlPanel.getInstance();
+                tempPanel.increaseTotalMessages();
             }
         };
 

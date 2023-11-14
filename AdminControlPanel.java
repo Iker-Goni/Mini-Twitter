@@ -5,7 +5,6 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +12,7 @@ import java.util.HashSet;
 
 
 public class AdminControlPanel extends JFrame{
+    private int totalMessages;
     private List<User> users;
     private List<UserGroup> groups;
     private HashSet<String> userIDs;
@@ -25,6 +25,7 @@ public class AdminControlPanel extends JFrame{
 
     // private constructor for AdminControlPanel
     private AdminControlPanel() {
+        this.totalMessages = 0;
         this.users = new ArrayList<>();
         this.groups = new ArrayList<>();
         this.userIDs = new HashSet<>();
@@ -60,8 +61,11 @@ public class AdminControlPanel extends JFrame{
             JOptionPane.showMessageDialog(null, "Error: Can only add users and groups to groups.");
         }
     }
-    
 
+    public void increaseTotalMessages(){
+        totalMessages++;
+    }
+    
     // set up components
     public void initialize() {
         JFrame frame = new JFrame();
@@ -210,6 +214,16 @@ public class AdminControlPanel extends JFrame{
         };
 
         openUserView.addActionListener(openUserViewAction);
+
+        // showMessagesTotal action
+        ActionListener showMessagesTotal = new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                JOptionPane.showMessageDialog(null, "Total messages posted by users: " + totalMessages);
+            }
+        };
+
+        messagesTotal.addActionListener(showMessagesTotal);
 
         // tree selection listener
         treeView.addTreeSelectionListener(new TreeSelectionListener() {

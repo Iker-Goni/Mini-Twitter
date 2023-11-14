@@ -19,13 +19,27 @@ public class AdminControlPanel extends JFrame{
     private JTree treeView;
     private DefaultTreeModel treeModel;
     private DefaultMutableTreeNode rootNode;
-    // Constructor for AdminControlPanel
-    public AdminControlPanel() {
+    private static AdminControlPanel instance;
+
+    // private constructor for AdminControlPanel
+    private AdminControlPanel() {
         this.users = new ArrayList<>();
         this.groups = new ArrayList<>();
         this.userIDs = new HashSet<>();
         this.groupIDs = new HashSet<>();
-        initialize(); // Call the initialization method in the constructor
+        UserGroup root = new UserGroup("Root");
+        rootNode = new DefaultMutableTreeNode(root);
+        treeModel = new DefaultTreeModel(rootNode);
+        treeView = new JTree(treeModel);
+        selectedNode = rootNode;
+    }
+
+    // Singleton design pattern
+    public static AdminControlPanel getInstance(){
+        if(instance == null){
+            instance = new AdminControlPanel();
+        }
+        return instance;
     }
 
     private void addChildNode(DefaultMutableTreeNode parentNode, Component component){
@@ -52,13 +66,6 @@ public class AdminControlPanel extends JFrame{
     // set up components
     public void initialize() {
         JFrame frame = new JFrame();
-
-        // create root group
-        UserGroup root = new UserGroup("Root");
-        rootNode = new DefaultMutableTreeNode(root);
-        treeModel = new DefaultTreeModel(rootNode);
-        treeView = new JTree(treeModel);
-        selectedNode = rootNode;
 
         // main panel
         JSplitPane mainPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -216,7 +223,7 @@ public class AdminControlPanel extends JFrame{
         // make window visible to user
         frame.setTitle("Admin Control Panel");
         frame.setSize(700, 500);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }
 }

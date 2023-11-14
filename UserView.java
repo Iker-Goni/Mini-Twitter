@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserView extends JFrame{
@@ -109,7 +108,7 @@ public class UserView extends JFrame{
         // make window visible to user
         frame.setTitle(currentUser.getID() + "'s Profile");
         frame.setSize(700, 500);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }
 }

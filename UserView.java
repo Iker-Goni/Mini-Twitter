@@ -18,8 +18,10 @@ public class UserView extends JFrame{
     private void updateCurrentFollowingModel(){
         currentFollowingModel.clear();
 
-        for(User u : currentUser.getFollowing()){
-            currentFollowingModel.addElement(u.getID());
+        if(currentUser.getFollowing().size() != 0){
+            for(User u : currentUser.getFollowing()){
+                currentFollowingModel.addElement(u.getID());
+            }
         }
     }
 
@@ -56,6 +58,7 @@ public class UserView extends JFrame{
 
         // newsFeed JList
         JList newsFeed = new JList();
+        updateCurrentFollowingModel();
 
         // add components to mainpanel gridbag
         centerPanel.add(userID, gbc);

@@ -14,19 +14,25 @@ public class AdminControlPanel extends JFrame{
     private List<User> users;
     private List<UserGroup> groups;
     private HashSet<String> userIDs;
+    private HashSet<String> groupIDs;
     private DefaultMutableTreeNode selectedNode;
     private JTree treeView;
     private DefaultTreeModel treeModel;
+    private DefaultMutableTreeNode rootNode;
     // Constructor for AdminControlPanel
     public AdminControlPanel() {
         this.users = new ArrayList<>();
         this.groups = new ArrayList<>();
         this.userIDs = new HashSet<>();
+        this.groupIDs = new HashSet<>();
         initialize(); // Call the initialization method in the constructor
     }
 
     private void addChildNode(DefaultMutableTreeNode parentNode, Component component){
-        Object parentObject = parentNode.getUserObject();
+        Object parentObject = rootNode.getUserObject();
+        if(!(parentNode == rootNode)){
+            parentObject = parentNode.getUserObject();
+        }
 
         // if the parent (selected node) is a userGroup
         if(parentObject instanceof UserGroup){
@@ -49,7 +55,7 @@ public class AdminControlPanel extends JFrame{
 
         // create root group
         UserGroup root = new UserGroup("Root");
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(root);
+        rootNode = new DefaultMutableTreeNode(root);
         treeModel = new DefaultTreeModel(rootNode);
         treeView = new JTree(treeModel);
         selectedNode = rootNode;
@@ -147,10 +153,16 @@ public class AdminControlPanel extends JFrame{
         ActionListener addedGroup = new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                UserGroup group = new UserGroup(groupID.getText());
-                groupID.setText("");
-                groups.add(group);
-                addChildNode(selectedNode, group);
+                if(groupIDs == null || !groupIDs.contains(groupID.getText())){
+                    groupIDs.add(groupID.getText());
+                    UserGroup group = new UserGroup(groupID.getText());
+                    groupID.setText("");
+                    groups.add(group);
+                    addChildNode(selectedNode, group);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Error: Group ID is already in use, try another.");
+                }
             }
         };
 
@@ -183,7 +195,7 @@ public class AdminControlPanel extends JFrame{
                 Object component = selectedNode.getUserObject();
                 if(component instanceof User){
                     User user = (User) component;
-                    UserView userView = new UserView(user);
+                    UserView userView = new UserView(user, users);
                 }
             }
         };

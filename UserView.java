@@ -1,21 +1,30 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserView extends JFrame{
     private User currentUser;
-    private UserGroup group;
-    public UserView(User user){
+    private List<User> users;
+    private DefaultListModel<String> currentFollowingModel;
+    public UserView(User user, List<User> users){
         this.currentUser = user;
+        this.users = users;
+        this.currentFollowingModel = new DefaultListModel<>();
         initialize();
+    }
+
+    private void updateCurrentFollowingModel(){
+        currentFollowingModel.clear();
+
+        for(User u : currentUser.getFollowing()){
+            currentFollowingModel.addElement(u.getID());
+        }
     }
 
     public void initialize(){
         JFrame frame = new JFrame();
-        group = currentUser.getParent();
 
         // main panel for gridbagpanel
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -43,7 +52,7 @@ public class UserView extends JFrame{
         JButton postTweet = new JButton("Post Tweet");
 
         // currentFollowing JList
-        JList currentFollowing = new JList();
+        JList<String> currentFollowing = new JList<>(currentFollowingModel);
 
         // newsFeed JList
         JList newsFeed = new JList();
@@ -67,9 +76,15 @@ public class UserView extends JFrame{
         ActionListener followUserAction = new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                User user = new User(userID.getText());
-                userID.setText("");
-                currentUser.follow(user);
+                for(User u : users){
+                    if(u.getID().equals(userID.getText())){
+                        currentUser.follow(u);
+                        userID.setText("");
+                        updateCurrentFollowingModel();
+                        return;
+                    }
+                }
+                JOptionPane.showMessageDialog(null, "User Not Found");
             }
         };
 

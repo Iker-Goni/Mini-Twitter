@@ -67,6 +67,9 @@ public class AdminControlPanel extends JFrame{
     public void initialize() {
         JFrame frame = new JFrame();
 
+        // default tree node is rootNode
+        selectedNode = rootNode;
+
         // main panel
         JSplitPane mainPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 

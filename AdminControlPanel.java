@@ -5,6 +5,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashSet;
@@ -31,6 +33,7 @@ public class AdminControlPanel extends JFrame{
         rootNode = new DefaultMutableTreeNode(root);
         treeModel = new DefaultTreeModel(rootNode);
         treeView = new JTree(treeModel);
+        treeView.setCellRenderer(new CustomTreeCellRenderer());
         selectedNode = rootNode;
     }
 
@@ -42,26 +45,22 @@ public class AdminControlPanel extends JFrame{
         return instance;
     }
 
-    private void addChildNode(DefaultMutableTreeNode parentNode, Component component){
+    private void addChildNode(DefaultMutableTreeNode parentNode, Component component) {
         Object parentObject = rootNode.getUserObject();
-        if(!(parentNode == rootNode)){
+        if (!(parentNode == rootNode)) {
             parentObject = parentNode.getUserObject();
         }
-
+    
         // if the parent (selected node) is a userGroup
-        if(parentObject instanceof UserGroup){
+        if (parentObject instanceof UserGroup) {
             DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(component);
-
             treeModel.insertNodeInto(childNode, parentNode, parentNode.getChildCount());
-
             treeModel.nodeStructureChanged(parentNode);
-        }
-
-        // if the parent (selected node) is a user
-        else{
+        } else {
             JOptionPane.showMessageDialog(null, "Error: Can only add users and groups to groups.");
         }
     }
+    
 
     // set up components
     public void initialize() {

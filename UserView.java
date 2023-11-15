@@ -2,17 +2,20 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.List;
-import java.util.HashSet;
-import java.util.Arrays;
-import java.util.ArrayList;
 
 public class UserView extends JFrame implements Observer{
+    // current user 
     private User currentUser;
+    // list of all users
     private List<User> users;
+    // current following model used for list
     private DefaultListModel<String> currentFollowingModel;
+    // news feed model used for list
     private DefaultListModel<String> newsFeedModel;
+    // list for newsfeed
     private JList<String> newsFeed;
     
+    // userview constructor
     public UserView(User user, List<User> users){
         this.currentUser = user;
         this.users = users;
@@ -22,6 +25,7 @@ public class UserView extends JFrame implements Observer{
         initialize();
     }
 
+    // update currentfollowing model
     private void updateCurrentFollowingModel(){
         currentFollowingModel.clear();
 
@@ -32,6 +36,7 @@ public class UserView extends JFrame implements Observer{
         }
     }
 
+    // update news feed model
     private void updateNewsFeedModel(){
         newsFeedModel.clear();
 
@@ -45,6 +50,7 @@ public class UserView extends JFrame implements Observer{
         }
     }
 
+    // initialize the userview ui
     public void initialize(){
         JFrame frame = new JFrame();
 
@@ -75,11 +81,25 @@ public class UserView extends JFrame implements Observer{
 
         // currentFollowing JList
         JList<String> currentFollowing = new JList<>(currentFollowingModel);
+        currentFollowing.setVisibleRowCount(10); 
+        currentFollowing.setFixedCellWidth(150); 
         updateCurrentFollowingModel();
+
+        // leftPane for followers
+        JScrollPane leftPanel = new JScrollPane(currentFollowing);
+        JLabel leftPanelLabel = new JLabel("Following");
+        leftPanel.setColumnHeaderView(leftPanelLabel);
 
         // newsFeed JList
         newsFeed = new JList<>(newsFeedModel);
+        newsFeed.setVisibleRowCount(10);
+        newsFeed.setFixedCellWidth(150);
         updateNewsFeedModel();
+
+        // rightpane for newsfeed
+        JScrollPane rightPanel = new JScrollPane(newsFeed);
+        JLabel rightPanelLabel = new JLabel("News Feed");
+        rightPanel.setColumnHeaderView(rightPanelLabel);
 
         // add components to mainpanel gridbag
         centerPanel.add(userID, gbc);
@@ -87,14 +107,9 @@ public class UserView extends JFrame implements Observer{
         centerPanel.add(followUser, gbc);
         gbc.gridy = 1;
         gbc.gridx = 0;
-        centerPanel.add(currentFollowing, gbc);
-        gbc.gridy = 2;
         centerPanel.add(tweetMessage, gbc);
         gbc.gridx = 1;
         centerPanel.add(postTweet, gbc);
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        centerPanel.add(newsFeed);
 
         // followUser action
         ActionListener followUserAction = new ActionListener(){
@@ -129,6 +144,10 @@ public class UserView extends JFrame implements Observer{
         // add centerPanel to mainPanel
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
+        // add left and right panel to main panel
+        mainPanel.add(leftPanel, BorderLayout.WEST);
+        mainPanel.add(rightPanel, BorderLayout.EAST);
+
         // add mainPanel to frame
         frame.add(mainPanel);
 
@@ -139,6 +158,7 @@ public class UserView extends JFrame implements Observer{
         frame.setVisible(true);
     }
 
+    // update the news feed
     @Override
     public void update(String tweet){
         updateNewsFeedModel();

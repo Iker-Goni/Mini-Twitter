@@ -5,34 +5,42 @@ public class UserGroup implements Component{
     private String groupID;
     private List<Component> components;
 
+    // usergroup constructor
     public UserGroup(String groupID){
         this.groupID = groupID;
         this.components = new ArrayList<>();
     }
 
+    // get the components
     public List<Component> getComponents(){
         return this.components;
     }
 
+    // accept a visitor for data
     public void acceptVisitor(Visitor visitor){
         visitor.visit(this);
     }
 
+    // get group id
     @Override
     public String getID(){
         return this.groupID;
     }
 
+    // add a user 
     @Override
     public void addUser(Component component){
         components.add(component);
     }
 
+
+    // remove a user
     @Override 
     public void removeUser(Component component){
         components.remove(component);
     }
 
+    // print user group
     @Override
     public String toString(){
         return getID();

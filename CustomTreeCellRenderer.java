@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
+// mainly used to show either file or folder icon for nodes in tree view
 public class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
     @Override
     public java.awt.Component getTreeCellRendererComponent(

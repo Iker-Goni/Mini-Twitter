@@ -12,18 +12,30 @@ import java.util.HashSet;
 
 
 public class AdminControlPanel extends JFrame{
+    // total messages
     private int totalMessages;
+    // total positive messages
     private int totalPositiveMessages;
+    // total users
     private int totalUsers;
+    // total groups
     private int totalGroups;
+    // list of users
     private List<User> users;
+    // list of groups
     private List<UserGroup> groups;
+    // set of userids
     private HashSet<String> userIDs;
+    // set of groupids
     private HashSet<String> groupIDs;
+    // selected node in the tree view
     private DefaultMutableTreeNode selectedNode;
+    // tree view of hiearchy
     private JTree treeView;
     private DefaultTreeModel treeModel;
+    // root node
     private DefaultMutableTreeNode rootNode;
+    // singleton instance of admincontrolpanel
     private static AdminControlPanel instance;
 
     // private constructor for AdminControlPanel
@@ -49,6 +61,7 @@ public class AdminControlPanel extends JFrame{
         return instance;
     }
 
+    // get the data for showing statistics
     private void getStatistics(){
         TwitterStatisticsVisitor twitterStatistics = new TwitterStatisticsVisitor();
 
@@ -65,6 +78,7 @@ public class AdminControlPanel extends JFrame{
         totalPositiveMessages = twitterStatistics.getTotalPositiveMessages();
     }
 
+    // add a childnode to the tree, and update the tree
     private void addChildNode(DefaultMutableTreeNode parentNode, Component component) {
         Object parentObject = rootNode.getUserObject();
         if (!(parentNode == rootNode)) {
@@ -79,14 +93,6 @@ public class AdminControlPanel extends JFrame{
         } else {
             JOptionPane.showMessageDialog(null, "Error: Can only add users and groups to groups.");
         }
-    }
-
-    public void increaseTotalMessages(){
-        totalMessages++;
-    }
-
-    public void increaseTotalPositiveMessages(){
-        totalPositiveMessages++;
     }
     
     // set up components
@@ -170,7 +176,13 @@ public class AdminControlPanel extends JFrame{
         ActionListener addedUser = new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                if(userIDs == null || !userIDs.contains(userID.getText())){
+                if(userID.getText().equals("")){
+                    JOptionPane.showMessageDialog(null,"Error: User ID cannot be empty.");
+                }
+                else if(selectedNode.getUserObject() instanceof User){
+                    JOptionPane.showMessageDialog(null,"Error: Can only add users and groups to groups.");
+                }
+                else if(userIDs == null || !userIDs.contains(userID.getText())){
                     userIDs.add(userID.getText());
                     User user = new User(userID.getText());
                     userID.setText("");
@@ -189,7 +201,13 @@ public class AdminControlPanel extends JFrame{
         ActionListener addedGroup = new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                if(groupIDs == null || !groupIDs.contains(groupID.getText())){
+                if(groupID.getText().equals("")){
+                    JOptionPane.showMessageDialog(null,"Error: Group ID cannot be empty.");
+                }
+                else if(selectedNode.getUserObject() instanceof User){
+                    JOptionPane.showMessageDialog(null,"Error: Can only add users and groups to groups.");
+                }
+                else if(groupIDs == null || !groupIDs.contains(groupID.getText())){
                     groupIDs.add(groupID.getText());
                     UserGroup group = new UserGroup(groupID.getText());
                     groupID.setText("");

@@ -188,6 +188,7 @@ public class AdminControlPanel extends JFrame{
                     userID.setText("");
                     users.add(user);
                     addChildNode(selectedNode, user);
+                    selectedNode = rootNode;
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "Error: User ID is already in use, try another.");

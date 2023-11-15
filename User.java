@@ -1,11 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class User implements Component{
+public class User implements Component, Observer, Subject{
     private String userID;
-    private List<User> followers;
+    private List<Observer> followers;
     private List<User> following;
     private List<String> postedMessages;
+    private List<String> newsFeed;
     private UserGroup parentGroup;
 
     public User(String userID){
@@ -13,6 +14,7 @@ public class User implements Component{
         this.followers = new ArrayList<>();
         this.following = new ArrayList<>();
         this.postedMessages = new ArrayList<>();
+        this.newsFeed = new ArrayList<>();
     }
 
     public UserGroup getParent(){
@@ -25,10 +27,13 @@ public class User implements Component{
 
     public void follow(User user){
         following.add(user);
+        user.addObserver(this);
     }
 
     public void postMessage(String message){
         postedMessages.add(message);
+        newsFeed.add(message);
+        notifyObservers(message);
     }
 
     public List<User> getFollowing(){
@@ -37,6 +42,10 @@ public class User implements Component{
 
     public List<String> getPostedMessages(){
         return this.postedMessages;
+    }
+
+    public List<String> getNewsFeed(){
+        return this.newsFeed;
     }
 
     @Override
@@ -57,5 +66,27 @@ public class User implements Component{
     @Override
     public String toString(){
         return getID();
+    }
+
+    @Override 
+    public void addObserver(Observer observer){
+        if(observer instanceof User){
+            this.followers.add((User) observer);
+        }
+        else{
+            this.followers.add((UserView) observer);
+        }
+    }
+
+    @Override 
+    public void notifyObservers(String tweet){
+        for(Observer observer : followers){
+            observer.update(tweet);
+        }
+    }
+
+    @Override
+    public void update(String tweet){
+        this.newsFeed.add(tweet);
     }
 }

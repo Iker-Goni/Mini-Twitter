@@ -3,15 +3,19 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.List;
 
-public class UserView extends JFrame{
+public class UserView extends JFrame implements Observer{
     private User currentUser;
     private List<User> users;
     private DefaultListModel<String> currentFollowingModel;
+    private DefaultListModel<String> newsFeedModel;
+    private JList<String> newsFeed;
     
     public UserView(User user, List<User> users){
         this.currentUser = user;
         this.users = users;
         this.currentFollowingModel = new DefaultListModel<>();
+        this.newsFeedModel = new DefaultListModel<>();
+        user.addObserver(this);
         initialize();
     }
 
@@ -22,6 +26,19 @@ public class UserView extends JFrame{
             for(User u : currentUser.getFollowing()){
                 currentFollowingModel.addElement(u.getID());
             }
+        }
+    }
+
+    private void updateNewsFeedModel(){
+        newsFeedModel.clear();
+
+        List<String> newsFeedData = currentUser.getNewsFeed();
+
+        if(newsFeedData.size() > 0){
+            for(String tweet : newsFeedData){
+                newsFeedModel.addElement(tweet);
+            }
+            newsFeed.setModel(newsFeedModel);
         }
     }
 
@@ -55,10 +72,11 @@ public class UserView extends JFrame{
 
         // currentFollowing JList
         JList<String> currentFollowing = new JList<>(currentFollowingModel);
+        updateCurrentFollowingModel();
 
         // newsFeed JList
-        JList newsFeed = new JList();
-        updateCurrentFollowingModel();
+        newsFeed = new JList<>(newsFeedModel);
+        updateNewsFeedModel();
 
         // add components to mainpanel gridbag
         centerPanel.add(userID, gbc);
@@ -117,5 +135,10 @@ public class UserView extends JFrame{
         frame.setSize(700, 500);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
+    }
+
+    @Override
+    public void update(String tweet){
+        updateNewsFeedModel();
     }
 }

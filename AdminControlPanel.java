@@ -5,7 +5,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
-
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashSet;
@@ -13,6 +13,9 @@ import java.util.HashSet;
 
 public class AdminControlPanel extends JFrame{
     private int totalMessages;
+    private int totalPositiveMessages;
+    private int totalUsers;
+    private int totalGroups;
     private List<User> users;
     private List<UserGroup> groups;
     private HashSet<String> userIDs;
@@ -46,6 +49,22 @@ public class AdminControlPanel extends JFrame{
         return instance;
     }
 
+    private void getStatistics(){
+        TwitterStatisticsVisitor twitterStatistics = new TwitterStatisticsVisitor();
+
+        for(User user : users){
+            twitterStatistics.visit(user);
+        }
+
+        for(UserGroup userGroup : groups){
+            twitterStatistics.visit(userGroup);
+        }
+        totalUsers = twitterStatistics.getTotalUsers();
+        totalGroups = twitterStatistics.getTotalGroups();
+        totalMessages = twitterStatistics.getTotalMessages();
+        totalPositiveMessages = twitterStatistics.getTotalPositiveMessages();
+    }
+
     private void addChildNode(DefaultMutableTreeNode parentNode, Component component) {
         Object parentObject = rootNode.getUserObject();
         if (!(parentNode == rootNode)) {
@@ -64,6 +83,10 @@ public class AdminControlPanel extends JFrame{
 
     public void increaseTotalMessages(){
         totalMessages++;
+    }
+
+    public void increaseTotalPositiveMessages(){
+        totalPositiveMessages++;
     }
     
     // set up components
@@ -185,7 +208,8 @@ public class AdminControlPanel extends JFrame{
         ActionListener showUserTotal = new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                JOptionPane.showMessageDialog(null, "User Total: " + users.size());
+                getStatistics();
+                JOptionPane.showMessageDialog(null, "User Total: " + totalUsers);
             }
         };
 
@@ -195,7 +219,8 @@ public class AdminControlPanel extends JFrame{
         ActionListener showGroupTotal = new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                JOptionPane.showMessageDialog(null, "Group Total: " + groups.size());
+                getStatistics();
+                JOptionPane.showMessageDialog(null, "Group Total: " + totalGroups);
             }
         };
 
@@ -219,11 +244,26 @@ public class AdminControlPanel extends JFrame{
         ActionListener showMessagesTotal = new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
+                getStatistics();
                 JOptionPane.showMessageDialog(null, "Total messages posted by users: " + totalMessages);
             }
         };
 
         messagesTotal.addActionListener(showMessagesTotal);
+
+        // showPositiveMessages action
+        ActionListener showPositiveMessagesTotal = new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                getStatistics();
+                DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                double result = Double.parseDouble(decimalFormat.format((double) totalPositiveMessages / (double) totalMessages));
+                int finalPositivePercentage = (int) (result * 100);
+                JOptionPane.showMessageDialog(null, "Percent of messages that are positive: " + finalPositivePercentage + "%");
+            }
+        };
+
+        positivePercentage.addActionListener(showPositiveMessagesTotal);
 
         // tree selection listener
         treeView.addTreeSelectionListener(new TreeSelectionListener() {

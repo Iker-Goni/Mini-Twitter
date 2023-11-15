@@ -14,6 +14,10 @@ public class UserGroup implements Component{
         return this.components;
     }
 
+    public void acceptVisitor(Visitor visitor){
+        visitor.visit(this);
+    }
+
     @Override
     public String getID(){
         return this.groupID;

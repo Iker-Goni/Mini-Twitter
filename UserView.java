@@ -2,6 +2,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 public class UserView extends JFrame implements Observer{
     private User currentUser;
@@ -118,7 +121,6 @@ public class UserView extends JFrame implements Observer{
                 currentUser.postMessage(tweetMessage.getText());
                 tweetMessage.setText("");
                 AdminControlPanel tempPanel = AdminControlPanel.getInstance();
-                tempPanel.increaseTotalMessages();
             }
         };
 

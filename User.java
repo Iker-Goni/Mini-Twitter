@@ -48,6 +48,10 @@ public class User implements Component, Observer, Subject{
         return this.newsFeed;
     }
 
+    public void acceptVisitor(Visitor visitor){
+        visitor.visit(this);
+    }
+
     @Override
     public String getID(){
         return this.userID;

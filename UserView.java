@@ -142,6 +142,7 @@ public class UserView extends JFrame implements Observer{
                 currentUser.postMessage(tweetMessage.getText());
                 tweetMessage.setText("");
                 AdminControlPanel tempPanel = AdminControlPanel.getInstance();
+                tempPanel.setLastestUpdatedUser(currentUser);
             }
         };
 

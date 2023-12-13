@@ -41,6 +41,9 @@ public class AdminControlPanel extends JFrame{
     // boolean that represents whether ids are valid or not
     private boolean validIDs;
 
+    // last updated user 
+    private User latestUpdatedUser;
+
     // private constructor for AdminControlPanel
     private AdminControlPanel() {
         this.totalMessages = 0;
@@ -49,6 +52,7 @@ public class AdminControlPanel extends JFrame{
         this.userIDs = new HashSet<>();
         this.groupIDs = new HashSet<>();
         this.validIDs = true;
+        this.latestUpdatedUser = null;
         UserGroup root = new UserGroup("Root");
         rootNode = new DefaultMutableTreeNode(root);
         treeModel = new DefaultTreeModel(rootNode);
@@ -80,6 +84,10 @@ public class AdminControlPanel extends JFrame{
         totalGroups = twitterStatistics.getTotalGroups();
         totalMessages = twitterStatistics.getTotalMessages();
         totalPositiveMessages = twitterStatistics.getTotalPositiveMessages();
+    }
+
+    public void setLastestUpdatedUser(User user){
+        this.latestUpdatedUser = user;
     }
 
     // add a childnode to the tree, and update the tree
@@ -155,6 +163,9 @@ public class AdminControlPanel extends JFrame{
         // validate ids button
         JButton validateIDs = new JButton("Validate IDs");
 
+        // last updated user button
+        JButton lastUpdatedUser = new JButton("Last Updated User");
+
         // add components to rightPanel
         rightPanel.add(userID, gbc);
         gbc.gridx = 1;
@@ -182,6 +193,9 @@ public class AdminControlPanel extends JFrame{
         gbc.gridx = 0;
         gbc.gridwidth = 2;
         rightPanel.add(validateIDs, gbc);
+        gbc.gridy = 6;
+        rightPanel.add(lastUpdatedUser, gbc);
+
 
 
         // addUser action
@@ -319,6 +333,16 @@ public class AdminControlPanel extends JFrame{
         };
 
         validateIDs.addActionListener(showIDValidation);
+
+        // last updated user action
+        ActionListener showLastUpdatedUser = new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e ){
+                JOptionPane.showMessageDialog(null, "Latest Updated User: " + lastUpdatedUser);
+            }
+        };
+
+        lastUpdatedUser.addActionListener(showLastUpdatedUser);
 
         // tree selection listener
         treeView.addTreeSelectionListener(new TreeSelectionListener() {

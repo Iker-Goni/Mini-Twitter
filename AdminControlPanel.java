@@ -38,6 +38,9 @@ public class AdminControlPanel extends JFrame{
     // singleton instance of admincontrolpanel
     private static AdminControlPanel instance;
 
+    // boolean that represents whether ids are valid or not
+    private boolean validIDs;
+
     // private constructor for AdminControlPanel
     private AdminControlPanel() {
         this.totalMessages = 0;
@@ -45,6 +48,7 @@ public class AdminControlPanel extends JFrame{
         this.groups = new ArrayList<>();
         this.userIDs = new HashSet<>();
         this.groupIDs = new HashSet<>();
+        this.validIDs = true;
         UserGroup root = new UserGroup("Root");
         rootNode = new DefaultMutableTreeNode(root);
         treeModel = new DefaultTreeModel(rootNode);
@@ -148,6 +152,9 @@ public class AdminControlPanel extends JFrame{
         // group id text area
         JTextArea groupID = new JTextArea();
 
+        // validate ids button
+        JButton validateIDs = new JButton("Validate IDs");
+
         // add components to rightPanel
         rightPanel.add(userID, gbc);
         gbc.gridx = 1;
@@ -171,6 +178,11 @@ public class AdminControlPanel extends JFrame{
         rightPanel.add(messagesTotal, gbc);
         gbc.gridx = 1;
         rightPanel.add(positivePercentage, gbc);
+        gbc.gridy = 5;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        rightPanel.add(validateIDs, gbc);
+
 
         // addUser action
         ActionListener addedUser = new ActionListener(){
@@ -183,6 +195,11 @@ public class AdminControlPanel extends JFrame{
                     JOptionPane.showMessageDialog(null,"Error: Can only add users and groups to groups.");
                 }
                 else if(userIDs == null || !userIDs.contains(userID.getText())){
+                    String[] splitID = userID.getText().split(" ");
+                    if(groupIDs.contains(userID.getText()) || splitID.length > 1){
+                        validIDs = false;
+                    }
+
                     userIDs.add(userID.getText());
                     User user = new User(userID.getText());
                     userID.setText("");
@@ -209,6 +226,10 @@ public class AdminControlPanel extends JFrame{
                     JOptionPane.showMessageDialog(null,"Error: Can only add users and groups to groups.");
                 }
                 else if(groupIDs == null || !groupIDs.contains(groupID.getText())){
+                    String[] splitID = groupID.getText().split(" ");
+                    if(userIDs.contains(groupID.getText()) || splitID.length > 1){
+                        validIDs = false;
+                    }
                     groupIDs.add(groupID.getText());
                     UserGroup group = new UserGroup(groupID.getText());
                     groupID.setText("");
@@ -283,6 +304,21 @@ public class AdminControlPanel extends JFrame{
         };
 
         positivePercentage.addActionListener(showPositiveMessagesTotal);
+
+        // validate ids action
+        ActionListener showIDValidation = new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e ){
+                if(validIDs){
+                    JOptionPane.showMessageDialog(null, "All IDs are valid.");
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "All IDs are not valid.");
+                }
+            }
+        };
+
+        validateIDs.addActionListener(showIDValidation);
 
         // tree selection listener
         treeView.addTreeSelectionListener(new TreeSelectionListener() {

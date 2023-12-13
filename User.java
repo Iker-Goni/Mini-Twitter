@@ -8,14 +8,22 @@ public class User implements Component, Observer, Subject{
     private List<String> postedMessages;
     private List<String> newsFeed;
     private UserGroup parentGroup;
+    private long creationTime;
 
     // user constructor
     public User(String userID){
+        long start  = System.currentTimeMillis();
         this.userID = userID;
         this.followers = new ArrayList<>();
         this.following = new ArrayList<>();
         this.postedMessages = new ArrayList<>();
         this.newsFeed = new ArrayList<>();
+        this.creationTime = System.currentTimeMillis() - start;
+    }
+
+    // get creation time
+    public long getCreationTime(){
+        return this.creationTime;
     }
 
     // get parent (group) of user

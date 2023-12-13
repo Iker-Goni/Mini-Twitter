@@ -52,6 +52,9 @@ public class UserView extends JFrame implements Observer{
 
     // initialize the userview ui
     public void initialize(){
+        // show the creation time for user
+        System.out.println(currentUser.getCreationTime());
+
         JFrame frame = new JFrame();
 
         // main panel for gridbagpanel

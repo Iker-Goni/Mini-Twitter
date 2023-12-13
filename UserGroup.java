@@ -4,11 +4,19 @@ import java.util.List;
 public class UserGroup implements Component{
     private String groupID;
     private List<Component> components;
+    private long creationTime;
 
     // usergroup constructor
     public UserGroup(String groupID){
+        this.creationTime = System.currentTimeMillis();
         this.groupID = groupID;
         this.components = new ArrayList<>();
+        this.creationTime = System.currentTimeMillis() - this.creationTime;
+    }
+
+    // get creation time
+    public long getCreationTime(){
+        return this.creationTime;
     }
 
     // get the components

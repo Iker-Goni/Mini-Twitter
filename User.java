@@ -9,6 +9,7 @@ public class User implements Component, Observer, Subject{
     private List<String> newsFeed;
     private UserGroup parentGroup;
     private long creationTime;
+    private long lastUpdateTime;
 
     // user constructor
     public User(String userID){
@@ -24,6 +25,11 @@ public class User implements Component, Observer, Subject{
     // get creation time
     public long getCreationTime(){
         return this.creationTime;
+    }
+
+    // get last update time
+    public long getLastUpdateTime(){
+        return this.lastUpdateTime;
     }
 
     // get parent (group) of user
@@ -45,7 +51,7 @@ public class User implements Component, Observer, Subject{
     // post a message on the feed
     public void postMessage(String message){
         postedMessages.add(message);
-        newsFeed.add(message);
+        update(message);
         notifyObservers(message);
     }
 
@@ -116,5 +122,6 @@ public class User implements Component, Observer, Subject{
     @Override
     public void update(String tweet){
         this.newsFeed.add(tweet);
+        this.lastUpdateTime = System.currentTimeMillis();
     }
 }

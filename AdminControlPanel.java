@@ -338,7 +338,7 @@ public class AdminControlPanel extends JFrame{
         ActionListener showLastUpdatedUser = new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e ){
-                JOptionPane.showMessageDialog(null, "Latest Updated User: " + lastUpdatedUser);
+                JOptionPane.showMessageDialog(null, "Latest Updated User: " + latestUpdatedUser);
             }
         };
 
